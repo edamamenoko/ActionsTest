@@ -4,14 +4,18 @@ on:
   push:
     branches:
       - main
-      - releaseSTG
+      - develop
+  pull_request:
+    types:
+      - closed
 
 jobs:
   sync-develop:
     name: Sync hotfix to develop
-    if: startsWith(github.ref_name, 'hotfix/')
+    if: >-
+      github.event.before != '0000000000000000000000000000000000000000' &&
+      startsWith(github.ref_name, 'hotfix/')
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
@@ -35,9 +39,11 @@ jobs:
 
   delete-releaseSTG:
     name: Delete releaseSTG branch after merge to main
-    if: github.ref == 'refs/heads/main'
+    if: >-
+      github.event.pull_request.merged == true &&
+      contains(github.event.pull_request.head.ref, 'releaseSTG') &&
+      github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
-
     permissions:
       contents: write
 
