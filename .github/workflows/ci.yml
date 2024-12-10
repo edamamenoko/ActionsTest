@@ -30,24 +30,24 @@ jobs:
           git merge --no-ff ${{ github.ref_name }}
           git push origin develop
 
-delete-releaseSTG:
-  name: Delete releaseSTG branch after merge to main
-  runs-on: macos-latest
+  delete-releaseSTG:
+    name: Delete releaseSTG branch after merge to main
+    runs-on: macos-latest
 
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Configure Git
-      run: |
-        git config user.name "edamamenoko"
-        git config user.email "mashold0802@gmail.com"
+      - name: Configure Git
+        run: |
+          git config user.name "edamamenoko"
+          git config user.email "mashold0802@gmail.com"
 
-    - name: Delete releaseSTG branch
-      run: |
-        if git ls-remote --heads origin releaseSTG | grep -q "refs/heads/releaseSTG"; then
-          echo "Branch releaseSTG exists. Deleting..."
-          git push origin --delete releaseSTG
-        else
-          echo "Branch releaseSTG does not exist, skipping deletion."
-        fi
+      - name: Delete releaseSTG branch
+        run: |
+          if git ls-remote --heads origin releaseSTG | grep -q "refs/heads/releaseSTG"; then
+            echo "Branch releaseSTG exists. Deleting..."
+            git push origin --delete releaseSTG
+          else
+            echo "Branch releaseSTG does not exist, skipping deletion."
+          fi
