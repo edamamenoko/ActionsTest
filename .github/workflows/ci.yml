@@ -32,8 +32,7 @@ jobs:
 
   delete-releaseSTG:
     name: Delete releaseSTG branch after merge to main
-    if: ${{ github.ref == 'refs/heads/main' }}
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
@@ -44,22 +43,11 @@ jobs:
           git config user.name "edamamenoko"
           git config user.email "mashold0802@gmail.com"
 
-      - name: Check if releaseSTG branch exists
+      - name: Delete releaseSTG branch
         run: |
           if git ls-remote --heads origin releaseSTG | grep -q "refs/heads/releaseSTG"; then
-            echo "Branch releaseSTG exists"
-            echo "delete_releaseSTG=true" >> $GITHUB_ENV
+            echo "Branch releaseSTG exists. Deleting..."
+            git push origin --delete releaseSTG
           else
-            echo "Branch releaseSTG does not exist"
-            exit 0
+            echo "Branch releaseSTG does not exist, skipping deletion."
           fi
-
-      - name: Delete releaseSTG branch
-        if: ${{ env.delete_releaseSTG == 'true' }}
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          curl -X DELETE \
-            -H "Authorization: token $GITHUB_TOKEN" \
-            -H "Accept: application/vnd.github.v3+json" \
-            https://api.github.com/repos/${{ github.repository }}/git/refs/heads/releaseSTG
