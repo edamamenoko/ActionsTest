@@ -36,17 +36,26 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - name: Check if releaseSTG exists
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Configure Git
         run: |
-          BRANCH_EXISTS=$(git ls-remote --heads origin releaseSTG)
-          if [ -n "$BRANCH_EXISTS" ]; then
+          git config user.name "edamamenoko"
+          git config user.email "mashold0802@gmail.com"
+
+      - name: Check if releaseSTG branch exists
+        run: |
+          if git ls-remote --heads origin releaseSTG | grep -q "refs/heads/releaseSTG"; then
             echo "Branch releaseSTG exists"
+            echo "delete_releaseSTG=true" >> $GITHUB_ENV
           else
             echo "Branch releaseSTG does not exist"
             exit 0
           fi
 
       - name: Delete releaseSTG branch
+        if: ${{ env.delete_releaseSTG == 'true' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
