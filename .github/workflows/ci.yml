@@ -58,9 +58,5 @@ jobs:
 
       - name: Delete releaseSTG branch
         run: |
-          if git ls-remote --heads origin releaseSTG | grep -q "refs/heads/releaseSTG"; then
-            echo "Branch releaseSTG exists. Deleting..."
-            git push origin --delete releaseSTG
-          else
-            echo "Branch releaseSTG does not exist, skipping deletion."
-          fi
+          echo "Deleting the branch: ${{ github.event.pull_request.head.ref }}"
+          git push origin --delete ${{ github.event.pull_request.head.ref }}
