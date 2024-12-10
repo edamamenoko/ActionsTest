@@ -9,8 +9,11 @@ on:
 jobs:
   sync-develop:
     name: Sync hotfix to develop
-    if: ${{ github.event.before != '0000000000000000000000000000000000000000' && contains(github.ref, 'hotfix') }}
-    runs-on: macos-latest
+    if: startsWith(github.ref_name, 'hotfix/')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
@@ -32,7 +35,11 @@ jobs:
 
   delete-releaseSTG:
     name: Delete releaseSTG branch after merge to main
-    runs-on: macos-latest
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout code
