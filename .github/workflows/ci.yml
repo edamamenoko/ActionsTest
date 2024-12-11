@@ -13,9 +13,9 @@ jobs:
   sync-develop:
     name: Sync hotfix to develop
     if: >-
-      github.event.before != '0000000000000000000000000000000000000000' &&
-      startsWith(github.event.pull_request.head.ref, 'hotfix/')
-
+      github.event.pull_request.merged == true &&
+      startsWith(github.event.pull_request.head.ref, 'hotfix/') &&
+      github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -35,7 +35,7 @@ jobs:
       - name: Merge changes into develop
         run: |
           git checkout develop
-          git merge --no-ff ${{ github.ref_name }}
+          git merge --no-ff ${{ github.event.pull_request.head.ref }}
           git push origin develop
 
   delete-releaseSTG:
