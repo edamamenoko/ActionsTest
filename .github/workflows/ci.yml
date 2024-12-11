@@ -14,7 +14,8 @@ jobs:
     name: Sync hotfix to develop
     if: >-
       github.event.before != '0000000000000000000000000000000000000000' &&
-      startsWith(github.ref_name, 'hotfix/')
+      startsWith(github.event.pull_request.head.ref, 'hotfix/')
+
     runs-on: ubuntu-latest
     permissions:
       contents: write
