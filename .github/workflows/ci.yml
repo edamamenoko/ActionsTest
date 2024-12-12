@@ -15,7 +15,10 @@ jobs:
     if: >-
       github.event.pull_request.merged == true &&
       startsWith(github.event.pull_request.head.ref, 'hotfix/') &&
-      github.event.pull_request.base.ref == 'main'
+      (
+        github.event.pull_request.base.ref == 'main' ||
+        startsWith(github.event.pull_request.base.ref, 'releaseSTG')
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -39,12 +42,11 @@ jobs:
         run: |
           git merge --no-ff origin/${{ github.event.pull_request.head.ref }} -X theirs
           git push origin develop
- 
- delete-releaseSTG:
+  delete-releaseSTG:
     name: Delete releaseSTG branch after merge to main
     if: >-
       github.event.pull_request.merged == true &&
-      contains(github.event.pull_request.head.ref, 'releaseSTG') &&
+      startsWith(github.event.pull_request.head.ref, 'releaseSTG') &&
       github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     permissions:
