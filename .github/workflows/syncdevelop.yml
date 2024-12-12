@@ -1,4 +1,4 @@
-name: Branch Operations
+name: Sync hotfix to develop
 
 on:
   push:
@@ -37,21 +37,3 @@ jobs:
         run: |
           git merge --no-ff origin/${{ github.event.pull_request.head.ref }} -X theirs
           git push origin develop
-  delete-releaseSTG:
-    name: Delete releaseSTG branch after merge to main
-    if: >-
-      github.event.pull_request.merged == true &&
-      startsWith(github.event.pull_request.head.ref, 'releaseSTG') &&
-      github.event.pull_request.base.ref == 'main'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Delete releaseSTG branch
-        run: |
-          echo "Deleting the branch: ${{ github.event.pull_request.head.ref }}"
-          git push origin --delete ${{ github.event.pull_request.head.ref }}
