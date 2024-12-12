@@ -39,8 +39,7 @@ jobs:
         run: |
           git merge --no-ff origin/${{ github.event.pull_request.head.ref }} -X theirs
           git push origin develop
- 
- delete-releaseSTG:
+  delete-releaseSTG:
     name: Delete releaseSTG branch after merge to main
     if: >-
       github.event.pull_request.merged == true &&
