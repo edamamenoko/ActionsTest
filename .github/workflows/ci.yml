@@ -27,11 +27,6 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Configure Git
-        run: |
-          git config user.name "edamamenoko"
-          git config user.email "mashold0802@gmail.com"
-
       - name: Fetch all branches
         run: git fetch --all --prune
 
@@ -55,11 +50,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Configure Git
-        run: |
-          git config user.name "edamamenoko"
-          git config user.email "mashold0802@gmail.com"
 
       - name: Delete releaseSTG branch
         run: |
