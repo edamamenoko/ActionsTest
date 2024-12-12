@@ -43,7 +43,7 @@ jobs:
     name: Delete releaseSTG branch after merge to main
     if: >-
       github.event.pull_request.merged == true &&
-      contains(github.event.pull_request.head.ref, 'releaseSTG') &&
+      startsWith(github.event.pull_request.head.ref, 'releaseSTG') &&
       github.event.pull_request.base.ref == 'main'
     runs-on: ubuntu-latest
     permissions:
