@@ -15,7 +15,10 @@ jobs:
     if: >-
       github.event.pull_request.merged == true &&
       startsWith(github.event.pull_request.head.ref, 'hotfix/') &&
-      github.event.pull_request.base.ref == 'main'
+      (
+        github.event.pull_request.base.ref == 'main' ||
+        startsWith(github.event.pull_request.base.ref, 'releaseSTG')
+      )
     runs-on: ubuntu-latest
     permissions:
       contents: write
